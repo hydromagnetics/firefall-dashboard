@@ -1,4 +1,9 @@
 {
+ "provenance": {
+  "source": "NASA Physical Science Informatics (psi.nasa.gov); each investigation is cited by its DOI",
+  "coverage": "24 Combustion Science investigations plus 1 context entry (PSI-179, ASE). Test rows come from the 20 that publish experimental tables; PSI-60, PSI-62, PSI-115 and PSI-117 are analysis and modeling studies with no experimental table. Images, video and raw sensor files are not parsed.",
+  "ai_acknowledgment": "In this project, Claude (Anthropic), an AI model, assisted with separating burner-stream oxygen, recovering two values, writing the validator and exports, and checking the data. All values come from NASA's files, none was invented, and tools/validate.py re-checks this dataset."
+ },
  "generated": "2026-11-14T19:43:04",
  "config": {
   "_about": "Everything the relevance score depends on. All values here are judgments or assumptions, not PSI data; each carries a basis. Weights can be changed live with Adjust weights on the Rank tab.",

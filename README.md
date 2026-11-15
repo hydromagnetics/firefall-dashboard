@@ -2,7 +2,7 @@
 
 **NASA Space Apps Challenge 2026 · *Flame in Freefall* challenge · Team Polymathematics**
 
-FIREFALL is an SI-powered dashboard that turns NASA's microgravity combustion experiments into fire-safety answers for crewed habitats: the ISS, a lunar base, a pressurized rover, or a Mars habitat. It loads every Combustion Science investigation in NASA's Physical Science Informatics (PSI) repository, ranks them for the habitat you choose, and shows exactly where NASA's open data stops.
+FIREFALL is an SI-powered dashboard that turns NASA's microgravity combustion experiments into fire-safety answers for crewed habitats: the ISS, a lunar base, a pressurized rover, or a Mars habitat. It loads all 24 Combustion Science investigations in NASA's Physical Science Informatics (PSI) repository, with 2,009 test rows from the 20 that publish experimental tables, ranks them for the habitat you choose, and shows exactly where NASA's open data stops.
 
 **▶ Try it:** https://hydromagnetics.github.io/firefall-dashboard/ (or download `index.html` and open it in any modern browser; it works offline)
 
@@ -34,7 +34,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 
 - **Every value is traceable.** Each of the 2,009 test rows keeps the PSI file and line it came from. Errors in NASA's spreadsheets are flagged and left empty; the only two recovered values (ACME BRE "3400%" and "2100%", read as 34 % and 21 %) are marked approximate.
 - **Ambient vs burner oxygen is separated.** In ACME's inverse flames (274 rows), the oxygen value is the gas leaving the burner, not the surrounding atmosphere. It is stored separately as `o2_burner_frac` and never treated as a habitat atmosphere.
-- **Checked against NASA's originals.** All 25 DOIs match PSI's live records; every Saffire-II value matches NASA's CSV; the solid-material tables were re-read from NASA's files.
+- **Checked against NASA's originals.** All 25 DOIs (the 24 combustion investigations plus ASE, a cabin-aerosol context entry for smoke detection) match PSI's live records; every Saffire-II value matches NASA's CSV; the solid-material tables were re-read from NASA's files.
 - **Checkable by anyone.** `python tools/validate.py` re-checks the dataset embedded in `index.html` (Python 3, standard library only). Every outside source, how it was checked, and every correction we made are listed in [docs/sources-and-verification.md](docs/sources-and-verification.md).
 
 ## Limitations
@@ -43,7 +43,8 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 - FIREFALL covers PSI only. Saffire-IV to VI, FM2, LUCI and SoFIE results are not in PSI yet; the dashboard says so and links NASA's pages.
 - PSI holds no partial-gravity data, so the lunar-gravity discussion relies on NASA literature, cited in the dashboard.
 - Live questions on the Ask tab need Claude access (an Anthropic API key outside claude.ai). The rest of the dashboard works offline.
-- The original ingestion scripts are not included; the processed dataset is in `data/` and is verified by `tools/validate.py`.
+- Test rows come from the 20 investigations that publish experimental tables (22 tables). PSI-60, PSI-62, PSI-115 and PSI-117 are analysis and modeling studies with no experimental table; they appear in the ranking from their PSI records only. Images, video and raw sensor files are not parsed.
+- The original ingestion scripts are not included; the processed dataset is in `data/` (described in [data/README.md](data/README.md)) and is verified by `tools/validate.py`.
 
 ## Repository
 
@@ -52,6 +53,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 | `index.html` | The dashboard (app and embedded data in one file) |
 | `data/psi_data.json` | The embedded dataset as JSON |
 | `data/tests.csv` | Every test row as a flat table (raw text plus low/high numeric values) |
+| `data/README.md` | What the data files contain, their provenance and AI acknowledgment |
 | `tools/validate.py` | Checks the data in `index.html`; `--export` regenerates `data/` |
 | `docs/FIREFALL-demo-deck.pdf` | The 7-slide demo deck |
 | `docs/data-sources.md` | The NASA PSI investigations used, with DOIs |
@@ -61,9 +63,9 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 
 ## Data and credits
 
-Data: NASA Physical Science Informatics (psi.nasa.gov); NASA places no restrictions on its use. Each investigation is cited by DOI in [docs/data-sources.md](docs/data-sources.md), as PSI requires. Additional NASA sources (the Researcher's Guide to Combustion Science, Saffire, FM2, LUCI and NTRS papers) are cited in [docs/sources-and-verification.md](docs/sources-and-verification.md).
+Data: NASA Physical Science Informatics (psi.nasa.gov); NASA places no restrictions on its use, and we cite each investigation by its DOI in [docs/data-sources.md](docs/data-sources.md). Additional NASA sources (the Researcher's Guide to Combustion Science, Saffire, FM2, LUCI and NTRS papers) are cited in [docs/sources-and-verification.md](docs/sources-and-verification.md).
 
-**Use of SI:** The Ask tab uses Claude (Anthropic), an AI model, to answer questions from the loaded PSI data; its answers are labelled and checked by the dashboard. Claude was also used during development to review the dashboard, fix data handling, add panels, write the validator, verify sources, and draft documentation and the demo deck. No NASA logos, flags or mission identifiers appear in any SI-generated content.
+**Use of SI (AI):** The Ask tab uses Claude (Anthropic), an AI model, to answer questions from the loaded PSI data; its answers are labelled and checked by the dashboard. Claude was also used during development to review the dashboard, fix data handling, add panels, write the validator, verify sources, and draft documentation and the demo deck. The same acknowledgment is in the metadata of `index.html`, `data/psi_data.json` (`provenance`), `data/README.md` and the demo deck PDF. No NASA logos, flags or mission identifiers appear in any SI-generated content, and no images were AI-generated (the screenshots are of the dashboard).
 
 **Team:** Polymathematics (NASA Space Apps 2026, Universal Event).
 
