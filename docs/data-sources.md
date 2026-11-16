@@ -35,4 +35,4 @@ Other references used in the challenge brief:
 
 - [NASA Glenn: Combustion Science](https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/)
 - [A Researcher's Guide to Combustion Science](https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/)
-- NASA Spinoff articles on fine-water-mist extinguishers, smoke detection and firefighter gear (links in the challenge brief)
+- The challenge brief's Earth applications: fine-water-mist extinguishers developed for the ISS, and NASA Spinoff articles on firefighters' air tanks, the shuttle smoke detector and firefighter clothing (links in the brief)

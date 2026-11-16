@@ -647,7 +647,7 @@ rect.hm:hover { stroke: var(--eyebrow) !important; stroke-width: 1.5; }
       </svg>
       <div>
         <h1>FIREFALL</h1>
-        <p class="sub">Which microgravity combustion experiments tell us the most about fire in crewed habitats? <span class="sub2">NASA Space Apps 2026 · Flame in Freefall challenge · NASA Physical Science Informatics · 24 investigations</span></p>
+        <p class="sub">Which microgravity combustion experiments tell us the most about fire in crewed habitats? <span class="sub2">NASA Space Apps 2026 · Flame in Freefall challenge · NASA Physical Science Informatics · 24 combustion investigations + 1 context</span></p>
       </div>
     </div>
     <div class="stats" id="stats"></div>
@@ -733,7 +733,7 @@ const FIELD_LABEL = {
   co2_initial_pct: 'CO₂ (initial)', co2_final_pct: 'CO₂ (final)', flames_ignited_count: 'Flames ignited per day', rt_r0_ratio: 'Rt/R0', duration_s: 'Duration', smoke_aging_time_s: 'Smoke aging time',
   fuel_material: 'Fuel / material', sample_desc: 'Sample description', diluent: 'Diluent', atmosphere_text: 'Atmosphere (text)', flow_direction: 'Flow direction', hot_ignition: 'Hot ignition', test_end: 'Test end',
   cool_flame: 'Cool flame', flame_config: 'Flame configuration', droplet_support: 'Droplet support fiber', electric_field: 'Mesh polarity', sensors: 'Instrument', flow_setting_raw: 'Air display setting',
-  burn_length_ug_raw: 'µg burn length (text)', spread_length_ug_raw: 'µg spread length (text)', burn_length_1g_raw: '1-g burn length (text)', spread_rate_1g_raw: '1-g spread rate (text)'
+  burn_length_ug_raw: 'Microgravity burn length (text)', spread_length_ug_raw: 'Microgravity spread length (text)', burn_length_1g_raw: '1-g burn length (text)', spread_rate_1g_raw: '1-g spread rate (text)'
 };
 const OUTCOME_FIELDS = CFG0.richness.outcome_fields;
 
@@ -802,7 +802,7 @@ function applyScenario(k) {
 }
 function insightLine(scores) {
   const top = scores[0], i = BY_ID[top.id], w = S.cfg.weights;
-  const parts = Object.entries(top.comp).map(([k, v]) => [k, v * w[k]]).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => ({ pillar: 'its fire-safety pillar', closeness: 'closeness to the target atmosphere', directness: 'direct fire-safety relevance', richness: 'data richness' })[k]);
+  const parts = Object.entries(top.comp).map(([k, v]) => [k, v * w[k]]).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => ({ pillar: 'its fire-safety focus', closeness: 'closeness to the target atmosphere', directness: 'direct fire-safety relevance', richness: 'data richness' })[k]);
   const sc = SCENARIOS[S.scenario];
   const band = targetBand(), cl = S.cfg.closeness;
   let solidNear = 0;
@@ -997,8 +997,8 @@ function renderControls() {
   const slider = (grp, k, label, max = 100, step = 1) => `<div class="ctl"><label><span><i class="dot" style="background:${DOT[k]}"></i>${label}</span><b id="v-${grp}-${k}">${fmt(c[grp][k], 2)}</b></label><input type="range" min="0" max="${max}" step="${step}" value="${c[grp][k]}" data-grp="${grp}" data-k="${k}"></div>`;
   $('#controls').innerHTML = `
     <div class="tg"><h3>What counts</h3>
-    ${slider('weights', 'pillar', 'Fire-safety pillar')}${slider('weights', 'closeness', 'Closeness to target')}${slider('weights', 'directness', 'Directness')}${slider('weights', 'richness', 'Data richness')}</div>
-    <div class="tg"><h3>Which pillar matters</h3>
+    ${slider('weights', 'pillar', 'Fire-safety focus')}${slider('weights', 'closeness', 'Closeness to target')}${slider('weights', 'directness', 'Directness')}${slider('weights', 'richness', 'Data richness')}</div>
+    <div class="tg"><h3>Which fire-safety area matters</h3>
     ${slider('pillar_weights', 'prevention', 'Flammability (prevention)', 1, 0.05)}${slider('pillar_weights', 'detection', 'Detection', 1, 0.05)}${slider('pillar_weights', 'suppression', 'Suppression', 1, 0.05)}</div>
     <div class="tg"><h3>Target band: ${esc(band.label)}</h3>
     <div class="ctl"><label>O₂ % (min, max)</label><div class="row2"><input type="number" step="0.5" id="b-o0" value="${band.o2[0]}" aria-label="O2 minimum"><input type="number" step="0.5" id="b-o1" value="${band.o2[1]}" aria-label="O2 maximum"></div></div>
@@ -1007,11 +1007,11 @@ function renderControls() {
     <div class="toolbar"><button class="ghost small" id="resetCfg" type="button">Reset to defaults</button></div></div>
     <details class="tg-wide"><summary>How the score is computed</summary><div class="formula">
       <p><b>Score</b> = Σ(weight × part) / Σ weights, each part 0–100.</p>
-      <p><b>Pillar</b>: strongest pillar tag (1.0 primary, 0.5 secondary, 0.25 weak) × its emphasis ÷ the largest emphasis.</p>
-      <p><b>Closeness</b>: for each test, d = √((ΔO₂/${c.closeness.o2_scale_pct_points})² + (ΔP/${c.closeness.pressure_scale_psi} psi)²), Δ = gap to the band (0 inside). Part = 100·(1−d) for the nearest test; ×${c.closeness.one_dimension_factor} if only O₂ or only pressure is recorded; ×${c.closeness.condition_matrix_factor} for FLEX-2's range matrix.</p>
-      <p><b>Directness</b>: fixed level per investigation (100 direct flight fire-safety test … 25 fundamental).</p>
-      <p><b>Richness</b>: mean of tests, varied conditions, outcome fields and PSI file count, each scaled to the best investigation.</p>
-      <p>Tags, levels and targets are in the <code>config</code> section of <code>data/psi_data.json</code>.</p></div></details>`;
+      <p><b>Focus</b>: how strongly the investigation addresses prevention, detection or suppression (1 main, 0.5 secondary, 0.25 minor), times the weight you give that area, divided by the largest weight.</p>
+      <p><b>Closeness</b>: how near the investigation's closest test is to the target oxygen and pressure. Distance d = √((ΔO₂/${c.closeness.o2_scale_pct_points})² + (ΔP/${c.closeness.pressure_scale_psi} psi)²), Δ = gap to the band (0 inside). Part = 100·(1−d) for the nearest test; ×${c.closeness.one_dimension_factor} if only O₂ or only pressure is recorded; ×${c.closeness.condition_matrix_factor} for FLEX-2's range matrix.</p>
+      <p><b>Directness</b>: how directly the investigation tests fire safety, set once per investigation (100 = a flight fire-safety test … 25 = basic combustion science).</p>
+      <p><b>Richness</b>: how much data there is: number of tests, conditions varied, recorded outcomes and PSI files, each scaled against the best investigation and averaged.</p>
+      <p>These judgments (focus, directness levels, targets) are ours, not NASA's, and are listed in the <code>config</code> section of <code>data/psi_data.json</code>.</p></div></details>`;
   $('#controls').oninput = e => {
     const el = e.target;
     if (el.dataset.grp) { c[el.dataset.grp][el.dataset.k] = +el.value; $(`#v-${el.dataset.grp}-${el.dataset.k}`).textContent = fmt(+el.value, 2); store.set('weights', c.weights); store.set('pillarWeights', c.pillar_weights);
@@ -1033,17 +1033,17 @@ function refreshScores() { clearTimeout(refreshTimer); refreshTimer = setTimeout
 // ---------- shared bits ----------
 function pillarChips(id) {
   const p = S.cfg.investigations[id].pillars;
-  return PILLARS.filter(k => p[k]).map(k => `<span class="chip ${k} ${p[k] < 0.5 ? 'weak' : ''}" title="${k} tag strength ${p[k]}">${k[0].toUpperCase() + k.slice(1)}${p[k] < 1 ? ` ${p[k]}` : ''}</span>`).join('');
+  return PILLARS.filter(k => p[k]).map(k => `<span class="chip ${k} ${p[k] < 0.5 ? 'weak' : ''}" title="${k[0].toUpperCase() + k.slice(1)}: ${p[k] >= 1 ? 'main focus' : p[k] >= 0.5 ? 'secondary focus' : 'minor focus'}">${k[0].toUpperCase() + k.slice(1)}${p[k] < 1 ? ` (${p[k] >= 0.5 ? 'secondary' : 'minor'})` : ''}</span>`).join('');
 }
 function scoreBars(s) {
   const w = S.cfg.weights;
-  return `<div class="bars">${[['pillar', 'Pillar'], ['closeness', 'Closeness'], ['directness', 'Directness'], ['richness', 'Richness']].map(([k, l]) =>
+  return `<div class="bars">${[['pillar', 'Focus'], ['closeness', 'Closeness'], ['directness', 'Directness'], ['richness', 'Richness']].map(([k, l]) =>
     `<span>${l} <span class="muted">×${w[k]}</span></span><span class="bar"><i style="width:${Math.max(0, Math.min(100, s.comp[k]))}%;background:${COMP_COLOR[k]}"></i></span><span class="v">${fmt(s.comp[k], 0)}</span>`).join('')}</div>`;
 }
 function bestRowText(s) {
   if (!s.bestRow) return 'No test in this investigation records O₂ or pressure.';
   const r = s.bestRow;
-  return `Nearest test <code>${esc(r.t.id)}</code>: O₂ ${r.o2 ? rng(r.o2[0], r.o2[1]) + ' %' : 'not recorded'}, ${r.ps ? rng(r.ps[0], r.ps[1]) + ' psi' : 'pressure not recorded'} (d = ${fmt(s.bestD, 3)}). Tests within d ≤ ${S.cfg.closeness.near_target_distance}: ${s.nearBoth} on both O₂ and pressure, ${s.nearOne} on one only.`;
+  return `Nearest test <code>${esc(r.t.id)}</code>: O₂ ${r.o2 ? rng(r.o2[0], r.o2[1]) + ' %' : 'not recorded'}, ${r.ps ? rng(r.ps[0], r.ps[1]) + ' psi' : 'pressure not recorded'} (distance ${fmt(s.bestD, 3)}, where 0 = inside the target and 1 = 15 O₂ points or 7 psi away). Tests close to the target (distance ≤ ${S.cfg.closeness.near_target_distance}): ${s.nearBoth} on both O₂ and pressure, ${s.nearOne} on one only.`;
 }
 const varRange = (inv, k, mult = 1, d = 1) => { const v = inv.variables[k]; return v && v.min != null ? rng(v.min * mult, v.max * mult, d) : '—'; };
 function fuels(inv) { const v = inv.variables.fuel_material; return v ? (v.examples || []).slice(0, 6).join('; ') + (v.n_distinct > 6 ? ` (+${v.n_distinct - 6} more)` : '') : '—'; }
@@ -1052,7 +1052,7 @@ function fuels(inv) { const v = inv.variables.fuel_material; return v ? (v.examp
 const PILLAR_NAME = { prevention: 'Flammability', detection: 'Detection', suppression: 'Suppression' };
 function category(id) {
   const p = S.cfg.investigations[id].pillars, top = PILLARS.filter(k => p[k]).sort((a, b) => p[b] - p[a])[0];
-  return top && p[top] >= 0.5 ? PILLAR_NAME[top] : 'Fundamental';
+  return top && p[top] >= 0.5 ? PILLAR_NAME[top] : 'Basic science';
 }
 function renderRank() {
   const root = $('#view');
@@ -1070,7 +1070,7 @@ function renderRank() {
         <div class="list-tools">
           <input type="search" id="ovQ" placeholder="Search name, fuel, objective…" value="${esc(S.ovFilter.q)}" aria-label="Search investigations">
           <select id="ovPhase" aria-label="Fuel phase">${opt('', 'All fuels', S.ovFilter.phase)}${Object.entries(PHASE_LABEL).map(([k, l]) => opt(k, l, S.ovFilter.phase)).join('')}</select>
-          <select id="ovPillar" aria-label="Fire-safety pillar">${opt('', 'All pillars', S.ovFilter.pillar)}${PILLARS.map(k => opt(k, PILLAR_NAME[k], S.ovFilter.pillar)).join('')}</select>
+          <select id="ovPillar" aria-label="Fire-safety area">${opt('', 'All fire-safety areas', S.ovFilter.pillar)}${PILLARS.map(k => opt(k, PILLAR_NAME[k], S.ovFilter.pillar)).join('')}</select>
         </div>
         <div id="rankList" class="rlist" role="listbox" tabindex="0" aria-label="Investigations ranked by score"></div>
       </section>
@@ -1178,7 +1178,7 @@ function miniFigure(id) {
 }
 // The score as a single stacked bar: each segment is weight × part ÷ total weight, so the segments add up to the score.
 function compositionBar(s) {
-  const w = S.cfg.weights, ws = w.pillar + w.closeness + w.directness + w.richness || 1, L = { pillar: 'Pillar', closeness: 'Closeness', directness: 'Directness', richness: 'Richness' };
+  const w = S.cfg.weights, ws = w.pillar + w.closeness + w.directness + w.richness || 1, L = { pillar: 'Focus', closeness: 'Closeness', directness: 'Directness', richness: 'Richness' };
   const seg = Object.keys(L).map(k => [k, s.comp[k] * w[k] / ws]);
   return `<div class="compo" role="img" aria-label="Score ${fmt(s.total, 0)} made of ${seg.map(([k, v]) => `${L[k]} ${fmt(v, 1)}`).join(', ')}">
     <div class="compo-bar">${seg.map(([k, v]) => `<i style="width:${v}%;background:${COMP_COLOR[k]}" title="${L[k]}: ${fmt(s.comp[k], 0)} × weight ${w[k]} → ${fmt(v, 1)} points"></i>`).join('')}<span class="compo-rest" style="width:${Math.max(0, 100 - s.total)}%"></span></div>
@@ -1205,7 +1205,7 @@ function renderOverview() {
     <div class="toolbar">
       <input type="text" id="ovQ" placeholder="Search title, fuel, objective…" value="${esc(S.ovFilter.q)}" class="grow">
       <select id="ovPhase"><option value="">All fuel phases</option>${Object.entries(PHASE_LABEL).map(([k, l]) => `<option value="${k}">${l}</option>`).join('')}</select>
-      <select id="ovPillar"><option value="">All pillars</option>${PILLARS.map(k => `<option value="${k}">${k[0].toUpperCase() + k.slice(1)} (≥ 0.5)</option>`).join('')}</select>
+      <select id="ovPillar"><option value="">All fire-safety areas</option>${PILLARS.map(k => `<option value="${k}">${k[0].toUpperCase() + k.slice(1)} (main or secondary)</option>`).join('')}</select>
       <select id="ovType"><option value="">Flight and ground</option><option value="Micro">Microgravity flight</option><option value="Ground">Ground</option></select>
     </div>
     <div id="ovBody"></div>`;
@@ -1239,7 +1239,7 @@ function renderOverviewBody() {
   <div class="cards">${shown.map((s, n) => {
     const i = BY_ID[s.id];
     return `<article class="card ${S.animate ? 'rise' : ''}" style="--phc:${phaseVar(i.fuel_phase.value)};animation-delay:${Math.min(n * 35, 600)}ms">
-      <div class="head"><div style="min-width:0"><div class="id"><span class="rankb ${s.rank <= 3 ? 'lead' : ''}">#${s.rank}</span>${i.id} · ${/Micro/.test(i.project_type) ? 'µg flight' : 'ground study'}</div><h4>${esc(name(i))}</h4><div class="title">${esc(i.title)}</div></div>
+      <div class="head"><div style="min-width:0"><div class="id"><span class="rankb ${s.rank <= 3 ? 'lead' : ''}">#${s.rank}</span>${i.id} · ${/Micro/.test(i.project_type) ? 'microgravity flight' : 'ground study'}</div><h4>${esc(name(i))}</h4><div class="title">${esc(i.title)}</div></div>
         ${scoreRing(s.total)}</div>
       <div class="chips">${pillarChips(i.id)}<span class="chip phase" style="--phc:${phaseVar(i.fuel_phase.value)}">${PHASE_LABEL[i.fuel_phase.value] || i.fuel_phase.value}</span></div>
       ${NOTES[i.id] ? `<div class="why" title="Team note: interpretation written for this dashboard, not PSI data"><span class="tag">Why it matters</span>${esc(NOTES[i.id].why)}</div>` : `<div class="obj">${esc(i.objective)}</div>`}
@@ -1268,7 +1268,7 @@ function studiesPanel() {
     <p class="small muted">Checked against PSI on 15 Nov 2026: none of these has data in PSI yet. Descriptions from NASA Glenn and the Researcher's Guide.</p>
     <div class="studies">
       <div class="study"><div class="id mono small muted">FM2</div><h3>Flammability of Materials on the Moon</h3><div class="small">The first combustion experiment on another planetary body: burns four fuel samples at 1/6 g in atmospheres planned for lunar habitats and vehicles, measuring flame spread, temperatures, O₂ and CO₂.</div><div class="uses"><a class="ghost" href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/flammability-of-materials-on-the-moon-fm2/" target="_blank" rel="noopener">NASA page</a></div></div>
-      <div class="study"><div class="id mono small muted">SoFIE</div><h3>Solid Fuel Ignition and Extinction</h3><div class="small">ISS facility for solid-material flammability. Chamber environments of 10–40 % O₂ at 0.2–1.5 atm (Researcher's Guide, p. 19); its Narrow Channel Apparatus burns PMMA from normal air up to 85 % O₂ with pressure adjusted to stay near normoxic. Delivered to the ISS on Cygnus NG-17; NASA lists it as operating there through February 2025, in conditions close to planned habitat atmospheres. Its results are not in PSI yet.</div><div class="uses"><a class="ghost" href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/solid-fuel-ignition-and-extinction-sofie/" target="_blank" rel="noopener">NASA page</a></div></div>
+      <div class="study"><div class="id mono small muted">SoFIE</div><h3>Solid Fuel Ignition and Extinction</h3><div class="small">ISS facility for solid-material flammability. Chamber environments of 10–40 % O₂ at 0.2–1.5 atm (Researcher's Guide, p. 19); its Narrow Channel Apparatus burns PMMA from normal air up to 85 % O₂ with the pressure lowered so the amount of oxygen stays close to that in normal air. Delivered to the ISS on Cygnus NG-17; NASA lists it as operating there through February 2025, in conditions close to planned habitat atmospheres. Its results are not in PSI yet.</div><div class="uses"><a class="ghost" href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/solid-fuel-ignition-and-extinction-sofie/" target="_blank" rel="noopener">NASA page</a></div></div>
       <div class="study"><div class="id mono small muted">FLARE</div><h3>Flammability Limits At Reduced-g Experiment</h3><div class="small">International project (JAXA, NASA, ESA, CNES, DLR and universities) to correlate material flammability limits in normal and microgravity, so ground tests can estimate limits in space.</div><div class="uses"><a class="ghost" href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/flammability-limits-at-reduced-g-experiment-flare/" target="_blank" rel="noopener">NASA page</a></div></div>
       <div class="study"><div class="id mono small muted">LUCI</div><h3>Lunar Combustion Investigation</h3><div class="small">Burned a cotton-fiberglass fabric and an acrylic rod for over two and a half minutes in simulated lunar gravity on a spinning Blue Origin New Shepard rocket, the first extended-duration (over 25 s) combustion tests at lunar g. Named in the challenge brief as future partial-gravity data for PSI.</div><div class="uses"><a class="ghost" href="https://ntrs.nasa.gov/citations/20250010653" target="_blank" rel="noopener">NTRS record</a></div></div>
     </div></div>
@@ -1294,7 +1294,7 @@ function detailHTML(id, s) {
   const sec = (title, body, open) => body ? `<details class="dsec" ${open ? 'open' : ''}><summary>${title}</summary><div class="dbody">${body}</div></details>` : '';
   return `
     <div class="d-head" style="--phc:${phaseVar(ph)}">
-      <div class="d-titles"><div class="id"><span class="rankb ${s.rank <= 3 ? 'lead' : ''}">#${s.rank}</span>${i.id} · ${/Micro/.test(i.project_type) ? 'µg flight experiment' : 'ground study'}</div>
+      <div class="d-titles"><div class="id"><span class="rankb ${s.rank <= 3 ? 'lead' : ''}">#${s.rank}</span>${i.id} · ${/Micro/.test(i.project_type) ? 'microgravity flight experiment' : 'ground study'}</div>
         <h2>${esc(name(i))}</h2><div class="title">${esc(i.title)}</div>
         <div class="chips">${pillarChips(id)}<span class="chip phase" style="--phc:${phaseVar(ph)}">${PHASE_LABEL[ph]}</span></div></div>
       ${scoreRing(s.total, 'big')}
@@ -1331,7 +1331,7 @@ function detailHTML(id, s) {
       ${i.hypothesis ? `<h4>Hypothesis</h4><p class="small">${esc(i.hypothesis)}</p>` : ''}
       ${i.impacts ? `<h4>Research impacts</h4><p class="small">${esc(i.impacts)}</p>` : ''}`)}
     ${builtOn(id).length ? sec(`Studies built on this data (${builtOn(id).length})`, `<ul class="small">${builtOn(id).map(g => `<li><button class="linklike" type="button" data-open="${g.id}">${g.id}</button> ${esc(g.title)} <span class="muted">(${esc(piText(g))})</span></li>`).join('')}</ul>`) : ''}
-    ${sec('How it was tagged', `<p class="small"><b>Pillar evidence (PSI text):</b> ${esc(c.evidence)}</p><p class="small"><b>Directness:</b> ${esc(c.directness.replace(/_/g, ' '))}: ${esc(S.cfg.directness_levels[c.directness].rule)}</p><p class="small"><b>Fuel phase basis:</b> ${esc(i.fuel_phase.basis)}</p>`)}
+    ${sec('How it was tagged', `<p class="small"><b>Focus evidence (PSI text):</b> ${esc(c.evidence)}</p><p class="small"><b>Directness:</b> ${esc(c.directness.replace(/_/g, ' '))}: ${esc(S.cfg.directness_levels[c.directness].rule)}</p><p class="small"><b>Fuel phase basis:</b> ${esc(i.fuel_phase.basis)}</p>`)}
     ${(i.flags || []).length ? sec(`Data flags (${i.flags.length})`, `<ul class="small">${i.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>`) : ''}
     ${(i.publications || []).length ? sec(`Publications (${i.publications.length})`, `<ul class="small">${i.publications.slice(0, 12).map(p => `<li>${esc(p.t)}${p.doi ? ` <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi</a>` : ''}</li>`).join('')}${i.publications.length > 12 ? `<li class="muted">+${i.publications.length - 12} more on PSI</li>` : ''}</ul>`) : ''}`;
 }
@@ -1352,7 +1352,7 @@ function openDetailOld(id, s) {
     <div class="grid2"><div>
       <h3>Score for ${esc(targetBand().label)}: ${fmt(s.total, 1)} (#${s.rank})</h3>${scoreBars(s)}
       <p class="small">${bestRowText(s)}</p>
-      <p class="small"><b>Pillar evidence (PSI text):</b> ${esc(c.evidence)}</p>
+      <p class="small"><b>Focus evidence (PSI text):</b> ${esc(c.evidence)}</p>
       <p class="small"><b>Directness:</b> ${esc(c.directness.replace(/_/g, ' '))}: ${esc(S.cfg.directness_levels[c.directness].rule)}</p>
     </div><div>
       <dl class="kv">
@@ -1397,7 +1397,7 @@ function renderCompare() {
     body = `<div class="tablewrap" style="max-height:none"><table class="cmp">
       <tr><th scope="row"></th>${I.map(i => `<th>${esc(name(i))}<div class="muted small">${i.id}</div></th>`).join('')}</tr>
       ${row(`Score (${esc(targetBand().label)})`, (i, n) => `<b>${fmt(Sc[n].total, 1)}</b> (#${Sc[n].rank})${scoreBars(Sc[n])}`)}
-      ${row('Pillars', i => pillarChips(i.id))}
+      ${row('Fire-safety focus', i => pillarChips(i.id))}
       ${row('Type / platform', i => `${esc(i.project_type)}<br><span class="muted">${esc(i.platform || '—')}</span>`)}
       ${row('Hardware', i => esc(i.hardware || '—'))}
       ${row('Fuel phase', i => PHASE_LABEL[i.fuel_phase.value])}
@@ -1428,7 +1428,7 @@ function compareFindings(I) {
   const phases = [...new Set(I.map(i => i.fuel_phase.value))];
   out.push(phases.length === 1 ? `All use ${PHASE_LABEL[phases[0]].toLowerCase()} fuels.` : `Fuel phases differ: ${I.map((i, n) => `${names[n]} ${PHASE_LABEL[i.fuel_phase.value].toLowerCase()}`).join(', ')}.`);
   const shared = PILLARS.filter(k => I.every(i => (S.cfg.investigations[i.id].pillars[k] || 0) >= 0.5));
-  out.push(shared.length ? `All inform ${shared.join(' and ')} (tag ≥ 0.5).` : 'No fire-safety pillar is shared by all (tag ≥ 0.5).');
+  out.push(shared.length ? `All have ${shared.join(' and ')} as a main or secondary focus.` : 'No fire-safety area (prevention, detection, suppression) is a main or secondary focus of all of them.');
   for (const [k, l, mult, unit] of [['o2_frac', 'O₂', 100, '%'], ['pressure_kpa', 'Pressure', PSI_PER_KPA, 'psi']]) {
     const have = I.filter(i => i.variables[k] && i.variables[k].min != null);
     const lack = I.filter(i => !have.includes(i));
@@ -1842,9 +1842,9 @@ function dataHooks(i) {
 }
 function renderEquipment() {
   const scores = scoreAll(), secs = [
-    ['detection', 'Detectors and smoke measurement', 'Investigations tagged Detection ≥ 0.5: smoke particle size, detector response and aerosol instruments.'],
-    ['suppression', 'Extinguishers and suppression', 'Investigations tagged Suppression ≥ 0.5: extinguishment, inert diluents and extinction limits.'],
-    ['prevention', 'Material choices and flammability', 'Investigations tagged Prevention ≥ 0.5: material flammability limits and flame spread.']];
+    ['detection', 'Detectors and smoke measurement', 'Investigations where detection is a main or secondary focus: smoke particle size, detector response and aerosol instruments.'],
+    ['suppression', 'Extinguishers and suppression', 'Investigations where suppression is a main or secondary focus: putting fires out, inert gases and extinction limits.'],
+    ['prevention', 'Material choices and flammability', 'Investigations where prevention is a main or secondary focus: how readily materials burn and how fast flames spread.']];
   V().innerHTML = `<div class="note info small" style="margin-bottom:14px">Quoted statements are verbatim from PSI investigation records; numbers come from the experimental tables. This view does not add interpretation. Ordered by score for <b>${esc(targetBand().label)}</b>.</div>` +
     secs.map(([k, title, intro]) => {
       const list = scores.filter(s => (S.cfg.investigations[s.id].pillars[k] || 0) >= 0.5);
@@ -1892,7 +1892,7 @@ function boundPanel() {
   const nCmp = oneMore + same + ugMore;
   return `<div class="panel bound"><h2>Can 0 g and 1 g results bound the Moon and Mars?</h2>
     <p>The challenge brief suggests microgravity and Earth-gravity results could bracket lunar and Martian gravity. The only PSI table that reports both a microgravity and a 1 g result for the same materials is <b>Saffire-II</b>, at about 22 % O₂ in a 20 cm/s flow. In ${nCmp} comparable samples, Earth gravity burned at least as much as microgravity every time (${oneMore} burned more in 1 g, ${same} the same, ${ugMore} more in microgravity).</p>
-    <div class="tablewrap" style="max-height:none"><table class="sumtab"><tr><th>Sample</th><th>Material</th><th>Flow</th><th>µg burn length</th><th>µg spread rate</th><th>1 g burn length</th><th>1 g spread rate</th><th>Comparison</th></tr>${body}</table></div>
+    <div class="tablewrap" style="max-height:none"><table class="sumtab"><tr><th>Sample</th><th>Material</th><th>Flow</th><th>Microgravity burn length</th><th>Microgravity spread rate</th><th>1 g burn length</th><th>1 g spread rate</th><th>Comparison</th></tr>${body}</table></div>
     <p class="small muted">Values verbatim from PSI-99 (Saffire-II) experimental table; "Complete" = the whole 29 cm sample burned. Comparison is by burn length.</p>
     <div class="note warn"><b>Why 1 g is not a safe ceiling.</b> NASA researchers report that flame spread rate peaks, and the oxygen needed to keep a flame alive is lowest, near lunar gravity, so a lunar-gravity fire may be worse than both the 0 g and 1 g cases. NASA's FM2 page says some materials that are not flammable on Earth may be flammable in lunar habitats. In other words, the 0 g to 1 g "bracket" can miss the most flammable condition. NASA's Flammability of Materials on the Moon (FM2) experiment is designed to test exactly this. Until that data is in PSI, treat 1 g screening results as a floor for lunar habitats, not a ceiling.
       <div class="small" style="margin-top:6px">Sources: <a href="https://ntrs.nasa.gov/citations/20260000646" target="_blank" rel="noopener">Ferkul, Kralik &amp; Liao, Material Flammability at Lunar and Martian Gravity (LPSC 2026)</a> · <a href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/flammability-of-materials-on-the-moon-fm2/" target="_blank" rel="noopener">NASA Glenn: Flammability of Materials on the Moon (FM2)</a> · <a href="https://ntrs.nasa.gov/citations/20210020516" target="_blank" rel="noopener">Ferkul, Liao et al., Fire on the Moon: Solid Fuel Combustion Experiments (2021)</a>. External literature, not PSI data.</div></div>
@@ -1922,12 +1922,12 @@ function renderGaps() {
       <ol>
         <li><b>No cabin material in PSI was tested in a lunar-habitat atmosphere.</b> Of ${sol.length} solid-material tests in PSI (fabrics, PMMA, Nomex, silicone), ${solP} record pressure, and the highest oxygen recorded is ${fmt(solO2, 1)} %. NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less (challenge brief). NASA has burned materials at exploration-like oxygen and pressure elsewhere (Saffire-IV and V, <a href="https://www.nasa.gov/wp-content/uploads/2025/07/spacecraft-fire-safety-demonstration-saffire.pdf" target="_blank" rel="noopener">NASA fact sheet</a>), but that data is not in PSI, so it cannot be searched, compared or reused here.</li>
         <li><b>Earth-gravity screening may not be the worst case.</b> In Saffire-II, the same materials burned at least as much in 1 g as in microgravity, but NASA research points to a flammability peak near lunar gravity, and NASA's own Researcher's Guide reports that the standard 1 g screening test (NASA-STD-6001 Test 1) "is not conservative" (see below).</li>
-        <li><b>There is no partial-gravity combustion data in PSI yet.</b> Every flight table is microgravity. FM2, SoFIE and FLARE are designed to fill these gaps (see Follow-on studies).</li>
+        <li><b>There is no partial-gravity combustion data in PSI yet.</b> Every flight table was recorded in microgravity. FM2, SoFIE and FLARE are designed to fill these gaps (see Follow-on studies).</li>
       </ol></div>
     <div class="tiles">
       <div class="tile warn rise"><b data-count="0">0</b><span>tables recording a partial-gravity level</span></div>
       <div class="tile warn rise" style="animation-delay:60ms"><b data-count="${nearBand.solid || 0}">${nearBand.solid || 0}</b><span>solid-material tests in or near the ${esc(band.label)} band</span></div>
-      <div class="tile rise" style="animation-delay:120ms"><b data-count="${near}">${near}</b><span>individual tests near the ${esc(band.label)} band (all fuels, d ≤ ${S.cfg.closeness.near_target_distance})</span></div>
+      <div class="tile rise" style="animation-delay:120ms"><b data-count="${near}">${near}</b><span>individual tests near the ${esc(band.label)} band (all fuels; within ${fmt(15 * S.cfg.closeness.near_target_distance, 1)} O₂ points or ${fmt(7 * S.cfg.closeness.near_target_distance, 1)} psi)</span></div>
       <div class="tile warn rise" style="animation-delay:180ms"><b data-count="${noP.length}">${noP.length}</b><span>investigations with no pressure column</span></div>
       <div class="tile rise" style="animation-delay:240ms"><b data-count="${flagRows}">${flagRows}</b><span>rows carrying a data-quality flag</span></div>
     </div>
@@ -1950,14 +1950,14 @@ function renderGaps() {
       </ul>
       <p class="small muted">Sources: <a href="https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/" target="_blank" rel="noopener">A Researcher's Guide to: Combustion Science (NASA, 2015)</a> · <a href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/flammability-of-materials-on-the-moon-fm2/" target="_blank" rel="noopener">NASA Glenn: FM2</a>. Outside literature, not PSI data.</p></div>
     <div class="panel"><h2>Partial gravity: no data in PSI yet</h2>
-      <p>${flight} of ${INV.length} combustion investigations are microgravity flight experiments; the other ${INV.length - flight} are ground studies. No experimental table in this set records a gravity level other than microgravity or normal gravity.</p>
-      ${partialHits.length ? `<details><summary>${partialHits.length} PSI sentence(s) mention reduced or partial gravity</summary>${partialHits.map(([i, s]) => `<div class="quote">${esc(s)}<span class="src">PSI record, ${i.id} ${esc(i.acronym || '')}</span></div>`).join('')}</details>` : ''}
+      <p>Of the ${INV.length} investigations, ${flight} are microgravity flight experiments and ${INV.length - flight} are ground studies. No experimental table in this set records a gravity level other than microgravity or normal gravity.</p>
+      ${partialHits.length ? `<details><summary>${partialHits.length} PSI ${partialHits.length === 1 ? 'sentence mentions' : 'sentences mention'} reduced or partial gravity</summary>${partialHits.map(([i, s]) => `<div class="quote">${esc(s)}<span class="src">PSI record, ${i.id} ${esc(i.acronym || '')}</span></div>`).join('')}</details>` : ''}
       <p><b>Project framing (from the challenge brief, not PSI):</b> microgravity and 1-g results could bound the lunar and Mars cases (see the panel above for why that may not hold); partial-gravity work such as LUCI (flown on a sounding rocket) and FM2 (planned for the Moon) is not in PSI yet; E-FIELD Flames has been described as mimicking partial gravity via electric fields.</p>
       ${efQuote ? `<div class="quote">${esc(efQuote[0].trim())}<span class="src">PSI record, PSI-22 (E-FIELD Flames). The PSI text describes isolating electric-field effects from buoyancy; it does not itself claim partial-gravity simulation.</span></div>` : ''}
     </div>
     <div class="grid2">
       <div class="panel"><h2>Coverage of the ${esc(band.label)} band</h2><p class="small muted">Individual tests whose O₂ and pressure both fall in ${rng(band.o2[0], band.o2[1])} % / ${rng(band.p[0], band.p[1])} psi.</p>
-        <table><tr><th>Fuel phase</th><th class="num">Inside band</th><th class="num">Near band (d ≤ ${S.cfg.closeness.near_target_distance})</th><th class="num">Tests with O₂ and pressure</th></tr>
+        <table><tr><th>Fuel phase</th><th class="num">Inside band</th><th class="num">Near band</th><th class="num">Tests with O₂ and pressure</th></tr>
         ${Object.entries(PHASE_LABEL).map(([k, l]) => `<tr><td>${l}</td><td class="num"><b>${inBand[k] || 0}</b></td><td class="num">${nearBand[k] || 0}</td><td class="num">${rowsWith[k] || 0}</td></tr>`).join('')}</table>
         <p class="small muted">d is the same normalized distance used in the closeness score (${S.cfg.closeness.o2_scale_pct_points} O₂ points or ${S.cfg.closeness.pressure_scale_psi} psi = 1). Individual tests only; range rows excluded.</p>
         <p class="small">${(inBand.solid || 0) === 0 ? 'No solid-material test (BASS, Saffire, SAME) records both O₂ and pressure in this band. Material flammability at elevated O₂ and reduced pressure is the largest gap for habitat fire safety in this dataset.' : ''}</p></div>
@@ -1968,8 +1968,8 @@ function renderGaps() {
     <div class="grid2">
       <div class="panel"><h2>Outcomes not recorded</h2><p class="small">Only FLEX and ACME CFI-G tables have explicit outcome columns (and ACME day summaries give flames ignited). ${unk.length} investigations have tables with no outcome for any row:</p>
         <p class="small">${unk.map(([i]) => `<span class="chip">${esc(name(i))}</span>`).join(' ')}</p></div>
-      <div class="panel"><h2>No experimental table</h2><p class="small">${noTable.length} ground studies have no table on PSI; their results are only in reports or publications:</p>
-        <p class="small">${noTable.map(i => `<span class="chip">${esc(name(i))} (${i.id})</span>`).join(' ')}</p></div>
+      <div class="panel"><h2>No experimental table</h2><p class="small">${noTable.length} investigations have no experimental table on PSI; their results are only in reports or publications:</p>
+        <p class="small">${noTable.map(i => `<span class="chip">${esc(name(i))}${name(i).includes(i.id) ? '' : ` (${i.id})`}</span>`).join(' ')}</p></div>
     </div>
     <div class="grid2">
       <div class="panel"><h2>Spacesuit atmosphere</h2><p class="small">${(() => { const amb = TESTS.filter(t => AXES.o2.get(t)), mx = Math.max(...amb.map(t => AXES.o2.get(t)[1])), who = [...new Set(amb.filter(t => AXES.o2.get(t)[1] >= mx - 0.05).map(t => name(BY_ID[t.p])))].join(', '); const bu = TESTS.filter(t => AXES.o2b.get(t)), bmx = Math.max(...bu.map(t => AXES.o2b.get(t)[1])), bp = bu.filter(t => AXES.o2b.get(t)[1] >= 80).map(t => AXES.psi.get(t)).filter(Boolean).flat(); return `The highest ambient O₂ in any table is ${fmt(mx, 0)} % (${esc(who)}). Burner-stream oxidizer in ACME inverse flames reaches ${fmt(bmx, 0)} %${bp.length ? ` at ${rng(Math.min(...bp), Math.max(...bp))} psi` : ''}, but the chamber around those flames held fuel and nitrogen, not oxygen, so they do not represent an oxygen-rich atmosphere.`; })()} Nothing in PSI tests a 100 % O₂ atmosphere at 4.3 psi.</p></div>
@@ -2256,14 +2256,14 @@ function renderAI() {
   if (AI.key == null) AI.key = store.get('apiKey', '') || '';
   V().innerHTML = `
     <div class="panel"><h2>SI assistant</h2>
-      <p class="small">Answers come from <b>${esc(MODEL)}</b> using only the PSI data loaded in this dashboard: a summary of all ${INV.length} investigations plus the test rows retrieved for each question (open "Data sent" under any answer). Citations link to the source rows. Numbers in an answer that can't be found in the data sent are <mark class="unverified">highlighted</mark>.</p>
+      <p class="small">Answers come from <b>Claude Opus 5.5</b> (Anthropic) using only the PSI data loaded in this dashboard: a summary of all ${INV.length} investigations plus the test rows retrieved for each question (open "Data sent" under any answer). Citations link to the source rows. Numbers in an answer that can't be found in the data sent are <mark class="unverified">highlighted</mark>.</p>
       <div id="aiMode">
       ${AI.sample ? `<p class="note info small" style="margin:8px 0 0">Answers use your own claude.ai account. The first question asks you to allow this page to use Claude.</p>` : window.claude ? `<p class="small muted" style="margin:8px 0 0">Connecting to Claude…</p>` : `
       <div class="toolbar">
         <input type="password" id="aiKey" placeholder="Anthropic API key (sk-ant-…)" value="${esc(AI.key)}" autocomplete="off" class="grow">
         <label class="small"><input type="checkbox" id="aiRemember" ${store.get('apiKey', '') ? 'checked' : ''}> Remember on this device</label>
       </div>
-      <p class="small muted">The key is sent only to api.anthropic.com from this browser. Unless "Remember" is ticked it is kept in memory and forgotten when the page closes. Use a key you are allowed to use client-side.</p>`}
+      <p class="small muted">The key is sent only to api.anthropic.com from this browser. Unless "Remember" is ticked it is kept in memory and forgotten when the page closes. Use your own Anthropic API key; it never goes to us or anywhere else.</p>`}
       </div>
     </div>
     <div class="panel saved"><h3 style="margin:0 0 4px">See example answers</h3><p class="small muted" style="margin:0 0 8px">${esc(SAVED_META)} No key needed.</p><div class="toolbar">${SAVED.map((e, k) => `<button class="ghost small" type="button" data-saved="${k}">${esc(e.q)}</button>`).join('')}</div></div>
