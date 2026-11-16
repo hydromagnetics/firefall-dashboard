@@ -74,7 +74,7 @@
      14.7,
      14.7
     ],
-    "basis": "Sea-level-equivalent cabin; matches the Earth reference in your brief (21% at 14.7 psi)."
+    "basis": "Sea-level-equivalent cabin, the same as the challenge's Earth reference (21 % O₂ at 14.7 psi)."
    },
    "orion": {
     "label": "Orion cabin",
@@ -86,7 +86,7 @@
      14.7,
      14.7
     ],
-    "basis": "ASSUMPTION: nominal sea-level-equivalent cabin. Confirm, and widen the band if you want reduced-pressure modes included."
+    "basis": "Assumed: nominal sea-level-equivalent cabin. Widen the range to include reduced-pressure modes."
    },
    "lunar_base": {
     "label": "Lunar base",
@@ -98,7 +98,7 @@
      8.2,
      10.2
     ],
-    "basis": "Your brief: ~30%+ O2 at <=10.2 psi. Lower edge 8.2 psi / upper 34% O2 is the commonly cited NASA exploration atmosphere; confirm the band."
+    "basis": "From the challenge: about 30 %+ O₂ at 10.2 psi or less. The 34 % O₂ / 8.2 psi edge is NASA's exploration atmosphere (Orndoff & Marmolejo, NTRS 20200002311)."
    },
    "rover": {
     "label": "Pressurized rover",
@@ -110,7 +110,7 @@
      8.2,
      10.2
     ],
-    "basis": "Your brief groups rover with the lunar base atmosphere."
+    "basis": "Same exploration atmosphere as the lunar base."
    },
    "mars_habitat": {
     "label": "Mars surface habitat",
@@ -122,7 +122,7 @@
      8.2,
      10.2
     ],
-    "basis": "ASSUMPTION: no flown baseline; same exploration atmosphere as the lunar base. Edit if your team has a reference design."
+    "basis": "Assumed: no flown baseline exists, so this uses the lunar-base exploration atmosphere. Edit the range for a specific design."
    },
    "earth": {
     "label": "Earth sea level",
@@ -134,7 +134,7 @@
      14.7,
      14.7
     ],
-    "basis": "Your brief."
+    "basis": "From the challenge (21 % O₂ at 14.7 psi)."
    },
    "spacesuit": {
     "label": "Spacesuit",
@@ -146,7 +146,7 @@
      4.3,
      4.3
     ],
-    "basis": "Your brief: 100% O2 at 4.3 psi."
+    "basis": "From the challenge: 100 % O₂ at 4.3 psi."
    }
   },
   "directness_levels": {
