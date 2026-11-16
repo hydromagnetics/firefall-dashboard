@@ -17,4 +17,4 @@ The same dataset that is embedded in `index.html`, exported by `python tools/val
 
 ## AI acknowledgment
 
-In this project, Claude (Anthropic), an AI model, assisted with separating burner-stream oxygen, recovering two values, writing the validator and exports, and checking the data. All values come from NASA's files, none was invented, and `tools/validate.py` re-checks this dataset.
+Claude (Anthropic), an AI model, helped build the original ingestion that produced this dataset and, during the hackathon, helped separate burner-stream oxygen, recover two values, write the validator and exports, and check the data. All values come from NASA's files, none was invented, and `tools/validate.py` re-checks this dataset.
