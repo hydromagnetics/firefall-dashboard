@@ -47,6 +47,9 @@ Every outside source used in the dashboard, deck and submission text, what it su
 | [Ferkul et al., LUCI results (NTRS 20250010653)](https://ntrs.nasa.gov/citations/20250010653) | NTRS record read | LUCI flew on a spinning New Shepard rocket: first extended-duration (over 25 s) combustion tests in simulated lunar gravity; not in PSI |
 | [Ferkul et al., LPSC 2026 presentation (NTRS 20260001966)](https://ntrs.nasa.gov/citations/20260001966) | Slides read | Lunar gravity "nearly the most flammable condition"; oxygen limit minimum near lunar g |
 | [Orndoff & Marmolejo, Soft goods in 34 % O₂ 8.2 psia atmosphere (NTRS 20200002311)](https://ntrs.nasa.gov/api/citations/20200002311/downloads/20200002311.pdf) | Opened | NASA ground tests of crew textiles in the exploration atmosphere; one reason the "never tested" wording was wrong |
+| [NASA Science: SoFIE](https://science.nasa.gov/biological-physical/investigations/sofie) | Opened 15 Nov 2026 | Delivered to the ISS via Cygnus NG-17; listed as operating through February 2025. Not in PSI |
+| [JAXA: FLARE](https://humans-in-space.jaxa.jp/en/biz-lab/experiment/theme/detail/000807.html) | Opened 15 Nov 2026 | JAXA investigation of material flammability in microgravity, listed as in progress. Not in PSI |
+| [Ferkul et al., LPSC 2026 slides (PDF)](https://ntrs.nasa.gov/api/citations/20260001966/downloads/Ferkul-Lunar%20and%20Planetary%20Science%20Conf%202026%20v2.pdf) | Read 15 Nov 2026 | "Numerical and experimental evidence suggests that Lunar gravity is nearly the most flammable condition." |
 | [NASA PSI on the Registry of Open Data](https://registry.opendata.aws/nasa-psi) | Opened | License: no restrictions on use (the dashboard previously said CC0; corrected) |
 
 ## Corrections made during verification
@@ -60,6 +63,8 @@ Every outside source used in the dashboard, deck and submission text, what it su
 - **Footer said NASA PSI data is CC0.** PSI's listing says only that there are no restrictions on use; wording corrected.
 - **References to files not in the repo** (`data/raw`, `data/processed/INGESTION_REPORT.md`, `ingest/ranking_config.json`) removed from dashboard text.
 - **LUCI** was described only as "future data"; it has flown (sounding rocket, simulated lunar g). Card updated with the NTRS record.
+
+- **SoFIE was described as "planned" and grouped with "upcoming" experiments.** NASA lists it as delivered to the ISS and operating through February 2025; wording corrected to say its results are not in PSI yet.
 
 ## Space Apps rules
 

@@ -25,7 +25,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 
 - **Rank:** all 24 investigations scored for a chosen habitat on four visible components (fire-safety pillar, closeness of tested oxygen and pressure to the habitat, directness, data richness). Weights are adjustable, and the dashboard warns when a lead rests on data that says nothing about cabin materials.
 - **Explore:** every test plotted by oxygen and pressure; filter, compare variables, and export rows for modeling.
-- **Insights:** key findings for lunar and Martian habitats, lessons from past spacecraft fires, the 0 g vs 1 g comparison, data gaps, and the experiments that will fill them (FM2, SoFIE, FLARE, LUCI).
+- **Insights:** key findings for lunar and Martian habitats, lessons from past spacecraft fires, the 0 g vs 1 g comparison, data gaps, and the NASA and partner experiments whose results could fill them (FM2, SoFIE, FLARE, LUCI).
 - **Ask:** an SI assistant (Claude) that answers only from the loaded PSI data, runs exact queries for counts and cites individual test rows. The dashboard then re-checks every number in the answer against the cited rows and highlights anything it cannot verify. Three pre-generated, labelled example answers work without a key.
 
 ![The Ask tab: a cited answer about a 34 % oxygen lunar rover, re-checked by the dashboard](docs/img/ask.png)
@@ -35,7 +35,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 - **Every value is traceable.** Each of the 2,009 table rows keeps the PSI file and line it came from. Errors in NASA's spreadsheets are flagged and left empty; the only two recovered values (ACME BRE "3400%" and "2100%", read as 34 % and 21 %) are marked approximate.
 - **Ambient vs burner oxygen is separated.** In ACME's inverse flames (274 rows), the oxygen value is the gas leaving the burner, not the surrounding atmosphere. It is stored separately as `o2_burner_frac` and never treated as a habitat atmosphere.
 - **Checked against NASA's originals.** All 25 DOIs (the 24 combustion investigations plus ASE, a cabin-aerosol context entry for smoke detection) match PSI's live records; every Saffire-II value matches NASA's CSV; the solid-material tables were re-read from NASA's files.
-- **Checkable by anyone.** `python tools/validate.py` re-checks the dataset embedded in `index.html` (Python 3, standard library only). Every outside source, how it was checked, and every correction we made are listed in [docs/sources-and-verification.md](docs/sources-and-verification.md).
+- **Checkable by anyone.** `python tools/verify_claims.py` recomputes every number in this README and the demo deck from `data/` and compares the investigation list and all 25 DOIs with NASA PSI; `python tools/validate.py` re-checks the dataset embedded in `index.html` (Python 3, standard library only). Every outside source, how it was checked, and every correction we made are listed in [docs/sources-and-verification.md](docs/sources-and-verification.md).
 
 ## Limitations
 
@@ -55,6 +55,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 | `data/tests.csv` | Every test row as a flat table (raw text plus low/high numeric values) |
 | `data/README.md` | What the data files contain, their provenance and AI acknowledgment |
 | `tools/validate.py` | Checks the data in `index.html`; `--export` regenerates `data/` |
+| `tools/verify_claims.py` | Recomputes every claim in the README, deck and project page from `data/` |
 | `docs/FIREFALL-demo-deck.pdf` | The 7-slide demo deck |
 | `docs/data-sources.md` | The NASA PSI investigations used, with DOIs |
 | `docs/sources-and-verification.md` | Every source used, how it was checked, and corrections made |
