@@ -2,7 +2,7 @@
 
 **NASA Space Apps Challenge 2026 · *Flame in Freefall* challenge · Team Polymathematics**
 
-FIREFALL is an SI-powered dashboard that turns NASA's microgravity combustion experiments into fire-safety answers for crewed habitats: the ISS, a lunar base, a pressurized rover, or a Mars habitat. It loads all 24 Combustion Science investigations in NASA's Physical Science Informatics (PSI) repository, with 2,009 test rows from the 20 that publish experimental tables, ranks them for the habitat you choose, and shows exactly where NASA's open data stops.
+FIREFALL is an SI-powered dashboard that turns NASA's microgravity combustion experiments into fire-safety answers for crewed habitats: the ISS, a lunar base, a pressurized rover, or a Mars habitat. It loads all 24 Combustion Science investigations in NASA's Physical Science Informatics (PSI) repository, with 2,009 table rows (1,879 individual tests plus 130 test-day and other summary rows) from the 20 that publish experimental tables, ranks them for the habitat you choose, and shows exactly where NASA's open data stops.
 
 **▶ Try it:** https://hydromagnetics.github.io/firefall-dashboard/ (or download `index.html` and open it in any modern browser; it works offline)
 
@@ -32,7 +32,7 @@ NASA expects a Moon base to run at 30 % or more oxygen at 10.2 psi or less, more
 
 ## How we know it is right
 
-- **Every value is traceable.** Each of the 2,009 test rows keeps the PSI file and line it came from. Errors in NASA's spreadsheets are flagged and left empty; the only two recovered values (ACME BRE "3400%" and "2100%", read as 34 % and 21 %) are marked approximate.
+- **Every value is traceable.** Each of the 2,009 table rows keeps the PSI file and line it came from. Errors in NASA's spreadsheets are flagged and left empty; the only two recovered values (ACME BRE "3400%" and "2100%", read as 34 % and 21 %) are marked approximate.
 - **Ambient vs burner oxygen is separated.** In ACME's inverse flames (274 rows), the oxygen value is the gas leaving the burner, not the surrounding atmosphere. It is stored separately as `o2_burner_frac` and never treated as a habitat atmosphere.
 - **Checked against NASA's originals.** All 25 DOIs (the 24 combustion investigations plus ASE, a cabin-aerosol context entry for smoke detection) match PSI's live records; every Saffire-II value matches NASA's CSV; the solid-material tables were re-read from NASA's files.
 - **Checkable by anyone.** `python tools/validate.py` re-checks the dataset embedded in `index.html` (Python 3, standard library only). Every outside source, how it was checked, and every correction we made are listed in [docs/sources-and-verification.md](docs/sources-and-verification.md).

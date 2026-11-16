@@ -4,8 +4,8 @@ The same dataset that is embedded in `index.html`, exported by `python tools/val
 
 | File | Contents |
 | --- | --- |
-| `psi_data.json` | Everything the dashboard uses: `provenance`, `config` (scoring weights and targets; team judgments, not PSI data), `investigations` (25 records with DOIs), `tests` (2,009 rows) and `reference_scores` |
-| `tests.csv` | Every test row as a flat table: test ID, PSI investigation, row type, fuel phase, outcome, source line, flags, then each field's raw text and its low/high numeric values |
+| `psi_data.json` | Everything the dashboard uses: `provenance`, `config` (scoring weights and targets; team judgments, not PSI data), `investigations` (25 records with DOIs), `tests` (2,009 table rows: 1,879 individual tests, 112 test-day summaries, 8 condition-matrix rows, 8 data-index rows and 2 session rows; see `row_type`) and `reference_scores` |
+| `tests.csv` | Every table row as a flat table (2,009 rows plus a header): test ID, PSI investigation, row type, fuel phase, outcome, source line, flags, then each field's raw text and its low/high numeric values |
 
 ## Provenance
 
